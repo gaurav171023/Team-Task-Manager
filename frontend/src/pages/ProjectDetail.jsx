@@ -14,7 +14,6 @@ export default function ProjectDetail() {
   const [users, setUsers] = useState([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [taskForm, setTaskForm] = useState({ title: '', description: '', status: 'TODO', priority: 'MEDIUM', dueDate: '', assignedToId: '' });
-  const [editingTask, setEditingTask] = useState(null);
   const [selectedMemberId, setSelectedMemberId] = useState('');
 
   const fetchProject = () => api.get(`/projects/${id}`).then(r => setProject(r.data));

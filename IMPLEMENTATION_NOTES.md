@@ -15,7 +15,7 @@ team-task-manager/
 │   │   │   └── user.controller.js
 │   │   ├── middleware/              # Authentication & authorization
 │   │   │   ├── auth.middleware.js
-│   │   │   └── role.middleware.js
+│   │   │   └── route/controller authorization checks
 │   │   ├── routes/                  # API endpoints
 │   │   │   ├── auth.routes.js
 │   │   │   ├── project.routes.js

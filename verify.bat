@@ -71,7 +71,6 @@ echo.
 
 echo 6. Checking Backend Middleware...
 if exist "backend\src\middleware\auth.middleware.js" (echo [OK] auth.middleware.js) else (echo [MISSING] auth.middleware.js & set /a errors+=1)
-if exist "backend\src\middleware\role.middleware.js" (echo [OK] role.middleware.js) else (echo [MISSING] role.middleware.js & set /a errors+=1)
 echo.
 
 echo 7. Checking Backend Routes...

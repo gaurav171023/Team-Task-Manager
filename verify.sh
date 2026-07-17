@@ -90,7 +90,6 @@ echo ""
 
 echo "6. Checking Backend Middleware..."
 check_file "backend/src/middleware/auth.middleware.js"
-check_file "backend/src/middleware/role.middleware.js"
 echo ""
 
 echo "7. Checking Backend Routes..."

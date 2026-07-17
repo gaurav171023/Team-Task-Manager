@@ -190,8 +190,8 @@ team-task-manager/
 ## Live Example
 
 Once deployed:
-- **Backend API**: `https://your-app.railway.app/api`
-- **Frontend**: `https://your-app.vercel.app`
+- **Backend API**: `https://team-task-manager-production-ec40.up.railway.app/api`
+- **Frontend**: `https://team-task-manager-jmsygd4vr.vercel.app`
 
 ## Security Notes
 

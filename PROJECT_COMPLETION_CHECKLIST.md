@@ -21,7 +21,7 @@
 
 #### Middleware (Auth & Authorization)
 - [x] `backend/src/middleware/auth.middleware.js` - JWT verification
-- [x] `backend/src/middleware/role.middleware.js` - Role-based access control
+- [x] Role-based access is handled in controllers and route logic
 
 #### Routes (API Endpoints)
 - [x] `backend/src/routes/auth.routes.js` - Auth endpoints
