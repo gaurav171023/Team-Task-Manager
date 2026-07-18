@@ -219,7 +219,7 @@ Frontend:
 - [ ] Add analytics
 - [ ] Configure error tracking
 
-### Railway Deployment
+### Railway Deployment  read last one changed
 
 Backend Service:
 1. Connect GitHub repository
@@ -314,3 +314,35 @@ npm install --save-dev vitest @testing-library/react
 **Last Updated**: 2024
 **Version**: 1.0.0
 **Status**: Production Ready
+## Deployment
+
+**Backend:** Deployed on Render (free tier) as a Web Service.
+- Root directory: `backend`
+- Build command: `npm install && npx prisma generate && npx prisma migrate deploy`
+- Start command: `node src/server.js`
+- Environment variables: `DATABASE_URL` (PostgreSQL, Render-hosted), `JWT_SECRET`, `CORS_ORIGIN`
+
+**Frontend:** Deployed on Vercel.
+- Environment variable: `VITE_API_URL` — points to the backend's `/api` base route.
+
+**Database:** PostgreSQL, hosted on Render (free tier).
+
+## Migration Story: SQLite/Railway → PostgreSQL/Render
+
+The project was originally built with SQLite for local development and deployed on Railway. When Railway's free trial expired, the backend went offline entirely, breaking the live demo.
+
+**Why the fix wasn't just "redeploy on Railway":**
+SQLite stores data in a single file. Render's free tier (and most modern PaaS free tiers) use ephemeral disk storage — meaning any file written at runtime, including a SQLite database, gets wiped on every restart or redeploy. So even after moving hosts, staying on SQLite would have caused data loss on every deploy. This required switching to a real relational database (PostgreSQL) rather than just changing hosting providers.
+
+**Steps taken:**
+1. Changed `prisma/schema.prisma` datasource provider from `sqlite` to `postgresql`.
+2. Deleted the old migrations folder — it contained SQLite-specific SQL syntax (`AUTOINCREMENT`, `DATETIME`) incompatible with Postgres.
+3. Created a PostgreSQL database on Render, generated a fresh Prisma migration against it (`prisma migrate dev`), and committed the new Postgres-compatible migration files.
+4. Created a new Render Web Service for the backend, configured to run `prisma migrate deploy` automatically on every build — so schema changes apply cleanly on future deploys without manual intervention.
+
+**Bugs hit and fixed during migration:**
+- **CORS mismatch:** Backend originally had a hardcoded CORS origin. Refactored to read from a `CORS_ORIGIN` environment variable, then set it to match the exact Vercel production domain — a wildcard or mismatched domain silently blocks all API requests from the frontend.
+- **Missing `/api` suffix:** Frontend's `VITE_API_URL` environment variable pointed to the backend root, but the frontend code assumed all API calls were prefixed with `/api`. Fixed by updating the env variable to include the correct suffix.
+- **Internal vs external database URL confusion:** Used Render's *external* Postgres connection string temporarily for local migration generation, then switched to the *internal* URL for the deployed backend service (faster, free, and intended for service-to-service communication within Render).
+
+This migration is a good example of diagnosing a multi-layer production issue — expired hosting trial, database persistence limitations, environment variable misconfiguration, and CORS — rather than a single isolated bug.
